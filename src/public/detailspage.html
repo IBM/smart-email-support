@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        table, th 
+        {
+            margin:10px 0;
+            border:solid 1px #333;
+            padding:2px 4px;
+            font:15px Verdana;
+            border-collapse: collapse;
+            background-color: hsl(159, 51%, 88%);
+        }
+        th {
+            font-weight:bold;
+            background-color: lightgray;
+            text-align: left;
+        }
+        button {
+            background-color: lightblue;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<script>
+        id = window.location.search.substring(1).split('=')[1];
+
+    function getEmailDetails(){
+        URL = "http://localhost:6014/rest/emailDetails/" + id;
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", URL, false);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        //xmlhttp.onreadystatechange = callbackFunction(xmlhttp);
+        xmlhttp.send();
+        //alert(typeof(xmlhttp.responseText));
+        var responseJSON = JSON.parse(xmlhttp.responseText);
+        //alert(responseJSON.docs.length);
+
+        console.log("Details data");
+        console.log(responseJSON);
+
+        var emailTable = document.createElement("table");
+        emailTable.setAttribute('id', 'email');
+        tr = emailTable.insertRow(-1);
+        //tr.setAttribute("bgcolor", "grey");
+        var th = document.createElement("th");
+        //td = tr.insertCell(-1);
+        th.innerHTML = "Email";
+        tr.appendChild(th);
+        tr = emailTable.insertRow(-1);
+        td = tr.insertCell(-1);
+        td.innerHTML = "Subject: " + responseJSON.emailSection.subject;
+        tr = emailTable.insertRow(-1);
+        td = tr.insertCell(-1);
+        td.innerHTML = "Sender: " + responseJSON.emailSection.from;
+        tr = emailTable.insertRow(-1);
+        td = tr.insertCell(-1);
+        td.innerHTML = "Text: " + responseJSON.emailSection.text;
+
+        var divContainer = document.getElementById("emailData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(emailTable); 
+
+        var entities = responseJSON.summarySection.entities;
+        keys = Object.keys(entities)
+        var summaryTable = document.createElement("table");
+        summaryTable.setAttribute('id', 'summary');
+        tr = summaryTable.insertRow(-1);
+        //tr.setAttribute("bgcolor", "grey");
+        th = document.createElement("th");
+        //td = tr.insertCell(-1);
+        th.innerHTML = "Request type: " + responseJSON.summarySection.requestType;
+        tr.appendChild(th);
+        var isAnyInfoMissing = false;
+        for (var i = 0; i < keys.length; i++) { 
+            tr = summaryTable.insertRow(-1);
+            td = tr.insertCell(-1);
+            if( !entities[keys[i]] || entities[keys[i]].length == 0 ){
+                td.setAttribute("style", "color:red");
+                isAnyInfoMissing = true;
+            }
+            td.innerHTML = keys[i] + ':' + entities[keys[i]];;
+        }
+        divContainer = document.getElementById("summaryData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(summaryTable); 
+
+        var replyTable = document.createElement("table");
+        replyTable.setAttribute('id', 'reply');
+        tr = replyTable.insertRow(-1);
+        //tr.setAttribute("bgcolor", "grey");
+        //td = tr.insertCell(-1);
+        th = document.createElement("th");
+        th.innerHTML = "Reply to: " + responseJSON.emailSection.from;
+        tr.appendChild(th);
+        tr = replyTable.insertRow(-1);
+        td = tr.insertCell(-1);
+        td.innerHTML = responseJSON.replySection.replyText;
+
+        // Add button only if email is to be sent for additional information
+        if( isAnyInfoMissing ){
+
+            tr = replyTable.insertRow(-1);
+            td = tr.insertCell(-1);
+            td.setAttribute("align", "right");
+            var btn = document.createElement("BUTTON");
+            btn.onclick = sendmail;
+            var btnName = document.createTextNode("Send Email");
+            btn.appendChild(btnName);
+            td.appendChild(btn);
+        }
+
+        divContainer = document.getElementById("replyData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(replyTable); 
+    }
+
+    function sendmail(){
+        //alert("This function is to send email for id " + id);
+
+        URL = "http://localhost:6014/rest/emailsender/" + id;
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", URL, false);
+        //xmlhttp.setRequestHeader("Content-Type", "application/json");
+        //xmlhttp.onreadystatechange = callbackFunction(xmlhttp);
+        xmlhttp.send();
+        //alert(typeof(xmlhttp.responseText));
+        var response = xmlhttp.responseText;
+        //alert(responseJSON.docs.length);
+        if( response == "success" ){
+            alert("Email sent successfully");
+        }
+        if( response == "failure" ){
+            alert("Error sending email");
+        }
+    }
+
+</script>
+<body onload="getEmailDetails()">
+    <br/><br/><div id="emailData"></div>
+    <br/><br/><div id="summaryData"></div>
+    <br/><br/><div id="replyData"></div>
+</body>
+</html>

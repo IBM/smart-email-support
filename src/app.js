@@ -64,14 +64,15 @@ app.get('/rest/emails', function(req, res){
            "subject",
            "entities",
            "requestType",
-           "status"
+           "status",
+           "timestamp"
         ],
         "sort": [
            {
               "_id": "asc"
            }
         ]
-     } ;
+    };
   
      db.find(query, function(er, result) {
       if (er) {
@@ -84,51 +85,315 @@ app.get('/rest/emails', function(req, res){
       res.send(result);
   });
   
-  });
+});
 
 
-  app.get('/rest/emails/:_id', function(req, res){
+app.get('/rest/emails/:_id', function(req, res){
 
-    var un_id = req.params._id
+  var un_id = req.params._id
   
-    const db = cloudant.db.use('email');
+  const db = cloudant.db.use('email');
     
-    var query = {
-        "selector": {
-           "_id": {
-              "$eq": un_id
-           }
-        },
-        "fields": [
-           "_id",
-           "_rev",
-           "text",
-           "from",
-           "subject",
-           "entities",
-           "requestType",
-           "status"
-        ],
-        "sort": [
-           {
-              "_id": "asc"
-           }
-        ]
-     } ;
+  var query = {
+      "selector": {
+          "_id": {
+            "$eq": un_id
+          }
+      },
+      "fields": [
+          "_id",
+          "_rev",
+          "text",
+          "from",
+          "subject",
+          "entities",
+          "requestType",
+          "status",
+          "timestamp"
+      ],
+      "sort": [
+          {
+            "_id": "asc"
+          }
+      ]
+  };
   
-     db.find(query, function(er, result) {
-      if (er) {
-        throw er;
+  db.find(query, function(er, result) {
+    if (er) {
+      throw er;
+    }
+
+    console.log('No of documents in database email', result.docs.length);
+    console.log(result);
+
+    res.send(result);
+  });
+});
+
+app.get('/rest/emailDetails/:_id', function(req, res){
+
+  var un_id = req.params._id
+  
+  const db = cloudant.db.use('email');
+    
+  var query = {
+      "selector": {
+          "_id": {
+            "$eq": un_id
+          }
+      },
+      "fields": [
+          "_id",
+          "_rev",
+          "text",
+          "from",
+          "subject",
+          "entities",
+          "requestType",
+          "status",
+          "timestamp"
+      ],
+      "sort": [
+          {
+            "_id": "asc"
+          }
+      ]
+  };
+  
+  db.find(query, function(er, result) {
+    if (er) {
+      throw er;
+    }
+
+    console.log('No of documents in database email', result.docs.length);
+    //console.log(result);
+    result = result.docs[0];
+    console.log(result.subject)
+    var emailDetails = {};
+    emailDetails.emailSection = {};
+    emailDetails.summarySection = {};
+    emailDetails.replySection = {};
+    var missingData = [];
+    
+
+    // emailSection
+    emailDetails.emailSection.subject = result.subject;
+    emailDetails.emailSection.from = result.from;
+    emailDetails.emailSection.text = result.text;
+
+    // Summary Section
+    emailDetails.summarySection.requestType = result.requestType;
+    emailDetails.summarySection.entities = {}
+    // Based on request type, include entities
+    if( result.requestType == "change_plan" ){
+      emailDetails.summarySection.entities.first_name = result.entities.first_name;
+      emailDetails.summarySection.entities.last_name = result.entities.last_name;
+      emailDetails.summarySection.entities.phone_no = result.entities.phone_no;
+      if( !result.entities.new_plan ){
+        missingData.push("New Plan");
+        emailDetails.summarySection.entities.new_plan = '';
+      }else{
+        emailDetails.summarySection.entities.new_plan = result.entities.new_plan;
       }
-    
-      console.log('No of documents in database email', result.docs.length);
-      console.log(result);
-  
-      res.send(result);
-  });
-  
-  });
+      
+      // Need to have new_plan
+    }else if( result.requestType == "enable_service" || result.requestType == "disable_service" || result.requestType == "service"){
+      emailDetails.summarySection.entities.first_name = result.entities.first_name;
+      emailDetails.summarySection.entities.last_name = result.entities.last_name;
+      emailDetails.summarySection.entities.phone_no = result.entities.phone_no;
+      if( !result.entities.service ){
+        missingData.push("Service to enable or disable");
+        emailDetails.summarySection.entities.service = '';
+      }else{
+        emailDetails.summarySection.entities.service = result.entities.service;
+      }
+      // Need to have service to enable
+    }else if( result.requestType == "add_family_member_to_plan" ){
+      emailDetails.summarySection.entities.first_name = result.entities.first_name;
+      emailDetails.summarySection.entities.last_name = result.entities.last_name;
+      emailDetails.summarySection.entities.phone_no = result.entities.phone_no;
+      if( !result.entities.add_user_first_name ){
+        missingData.push("Add User First Name");
+        emailDetails.summarySection.entities.add_user_first_name = '';
+      }else{
+        emailDetails.summarySection.entities.add_user_first_name = result.entities.add_user_first_name;
+      }
+      if( !result.entities.add_user_last_name ){
+        missingData.push("Add User Last Name");
+        emailDetails.summarySection.entities.add_user_last_name = '';
+      }else{
+        emailDetails.summarySection.entities.add_user_last_name = result.entities.add_user_last_name;
+      }
+      if( !result.entities.add_user_phone_no ){
+        missingData.push("Add User Phone No.");
+        emailDetails.summarySection.entities.add_user_phone_no = '';
+      }else{
+        emailDetails.summarySection.entities.add_user_phone_no = result.entities.add_user_phone_no;
+      }
+      // Need to have service to add_user_first_name, add_user_last_name, add_user_phone_no
+    }
 
+    var replyText = "";
+
+    emailDetails.replySection.missingData = missingData;
+    if( missingData.length > 0 ){
+      replyText = "Hi. <br/><br/> Thank you for sending email. We require the following details to proceed with your request resolution.<br/>";
+      for( var i = 0; i < missingData.length; i++ ){
+        replyText = replyText + "<br/>" + missingData[i];
+      }
+      emailDetails.status = "Incomplete";
+    }else{
+      replyText = "Thanks. We have all the information required to process this request. The request will be completed automatically";
+      emailDetails.status = "Complete";
+    }
+    emailDetails.replySection.replyText = replyText;
+
+    res.send(emailDetails);
+  });
+});
+
+
+app.get('/rest/emailsender/:_id', function(req, res){
+  var un_id = req.params._id
+  
+  const db = cloudant.db.use('email');
+    
+  var query = {
+      "selector": {
+          "_id": {
+            "$eq": un_id
+          }
+      },
+      "fields": [
+          "_id",
+          "_rev",
+          "text",
+          "from",
+          "subject",
+          "entities",
+          "requestType",
+          "status",
+          "timestamp"
+      ],
+      "sort": [
+          {
+            "_id": "asc"
+          }
+      ]
+  };
+  
+  db.find(query, function(er, result) {
+    if (er) {
+      throw er;
+    }
+
+    result = result.docs[0];
+    var emailDetails = {};
+    emailDetails.emailSection = {};
+    emailDetails.summarySection = {};
+    emailDetails.replySection = {};
+    var missingData = [];
+    
+
+    // emailSection
+    emailDetails.emailSection.subject = result.subject;
+    emailDetails.emailSection.from = result.from;
+    emailDetails.emailSection.text = result.text;
+
+    // Summary Section
+    emailDetails.summarySection.requestType = result.requestType;
+    emailDetails.summarySection.entities = {}
+    // Based on request type, include entities
+    if( result.requestType == "change_plan" ){
+      emailDetails.summarySection.entities.first_name = result.entities.first_name;
+      emailDetails.summarySection.entities.last_name = result.entities.last_name;
+      emailDetails.summarySection.entities.phone_no = result.entities.phone_no;
+      if( !result.entities.new_plan ){
+        missingData.push("New Plan");
+        emailDetails.summarySection.entities.new_plan = '';
+      }else{
+        emailDetails.summarySection.entities.new_plan = result.entities.new_plan;
+      }
+      
+      // Need to have new_plan
+    }else if( result.requestType == "enable_service" || result.requestType == "disable_service" || result.requestType == "service"){
+      emailDetails.summarySection.entities.first_name = result.entities.first_name;
+      emailDetails.summarySection.entities.last_name = result.entities.last_name;
+      emailDetails.summarySection.entities.phone_no = result.entities.phone_no;
+      if( !result.entities.service ){
+        missingData.push("Service to enable or disable");
+        emailDetails.summarySection.entities.service = '';
+      }else{
+        emailDetails.summarySection.entities.service = result.entities.service;
+      }
+      // Need to have service to enable
+    }else if( result.requestType == "add_family_member_to_plan" ){
+      emailDetails.summarySection.entities.first_name = result.entities.first_name;
+      emailDetails.summarySection.entities.last_name = result.entities.last_name;
+      emailDetails.summarySection.entities.phone_no = result.entities.phone_no;
+      if( !result.entities.add_user_first_name ){
+        missingData.push("Add User First Name");
+        emailDetails.summarySection.entities.add_user_first_name = '';
+      }else{
+        emailDetails.summarySection.entities.add_user_first_name = result.entities.add_user_first_name;
+      }
+      if( !result.entities.add_user_last_name ){
+        missingData.push("Add User Last Name");
+        emailDetails.summarySection.entities.add_user_last_name = '';
+      }else{
+        emailDetails.summarySection.entities.add_user_last_name = result.entities.add_user_last_name;
+      }
+      if( !result.entities.add_user_phone_no ){
+        missingData.push("Add User Phone No.");
+        emailDetails.summarySection.entities.add_user_phone_no = '';
+      }else{
+        emailDetails.summarySection.entities.add_user_phone_no = result.entities.add_user_phone_no;
+      }
+      // Need to have service to add_user_first_name, add_user_last_name, add_user_phone_no
+    }
+
+    var replyText = "";
+
+    emailDetails.replySection.missingData = missingData;
+    if( missingData.length > 0 ){
+      replyText = "Hi. \n Thank you for sending email. We require the following details to proceed with your request resolution.\n";
+      for( var i = 0; i < missingData.length; i++ ){
+        replyText = replyText + "\n" + missingData[i];
+      }
+      emailDetails.status = "Incomplete";
+    }else{
+      replyText = "Thanks. We have all the information required to process this request. The request will be completed automatically";
+      emailDetails.status = "Complete";
+    }
+    emailDetails.replySection.replyText = replyText;
+
+    var nodemailer = require('nodemailer');
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'patternemailautomation@gmail.com',
+        pass: 'welcome@123'
+      }
+    });
+
+    var mailOptions = {
+      from: 'patternemailautomation@gmail.com',
+      to: emailDetails.emailSection.from,
+      subject: "Re: " + emailDetails.emailSection.subject,
+      text: emailDetails.replySection.replyText
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+        res.send("failure");
+      } else {
+        console.log('Email sent: ' + info.response);
+        res.send("success");
+      }
+    });
+  });
+});
 // /**
 //  * HOW TO Make an HTTP Call - GET
 //  */
