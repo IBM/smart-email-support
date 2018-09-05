@@ -8,10 +8,13 @@
   "dependencies": {
     "@cloudant/cloudant": "^2.3.0",
     "body-parser": "^1.18.3",
+    "bootstrap": "^4.1.3",
     "cfenv": "1.0.x",
     "cors": "^2.8.4",
     "express": "4.15.x",
-    "nodemailer": "^4.6.8"
+    "jquery": "^3.3.1",
+    "nodemailer": "^4.6.8",
+    "popper.js": "^1.14.4"
   },
   "repository": {},
   "engines": {

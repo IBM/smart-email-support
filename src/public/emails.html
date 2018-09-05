@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Convert JSON Data to HTML Table</title>
+    <title>Email Support - Emails List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
     <style>
         table, th, td 
         {
@@ -14,14 +19,66 @@
         }
         th {
             font-weight:bold;
-            background-color: gray;
+            background-color: lightgray;
             text-align: left;
         }
+            /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
     </style>
 </head>
 <body onload="loadEmails()">
-    <br/><br/>
-    <div id="showData"></div>
+    <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav" style="width: 100%">
+                        <li><a href="./overview.html">Overview</a></li>
+                        <li class="active"><a href="./emails.html">Emails</a></li>
+                        <li style="text-align: center; width: 80%; font-size: x-large">
+                                <a href="#">Email Support Classifier</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            </nav>
+       
+<div class="container text-center">
+    <h3>List of emails</h3>
+    <div class="row" id="overview-row">
+    </div>
+</div>
+<br>
+
+                
+<div id="showData"></div>
 </body>
 
 <script>

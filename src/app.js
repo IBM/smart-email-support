@@ -1,4 +1,3 @@
-/*eslint-env node*/
 var cors = require('cors');
 var Cloudant = require('@cloudant/cloudant');
 var bodyParser = require('body-parser');
@@ -394,6 +393,74 @@ app.get('/rest/emailsender/:_id', function(req, res){
     });
   });
 });
+
+app.get('/rest/overview', function(req, res){
+
+  const db = cloudant.db.use('email');
+    
+  var query = {
+      "selector": {
+          "_id": {
+            "$gt": "0"
+          }
+      },
+      "fields": [
+          "_id",
+          "_rev",
+          "requestType",
+          "status"
+      ],
+      "sort": [
+          {
+            "_id": "asc"
+          }
+      ]
+  };
+  
+  db.find(query, function(er, result) {
+    if (er) {
+      throw er;
+    }
+
+    console.log('No of documents in database email', result.docs.length);
+    console.log(result);
+
+    var stats = {};
+
+    for(var i = 0; i < result.docs.length; i++ ){
+      var doc = result.docs[i];
+      var intent = doc.requestType;
+      var status = doc.status;
+      console.log(status)
+      // intents change_plan, enable_service, disable_service, add_family_member_to_plan
+      if( stats[intent] ){
+        stats[intent]["total"] += 1;
+          if( status == "Complete" ){
+            stats[intent]["complete"] += 1;
+          }else{
+            stats[intent]["need_attention"] += 1;
+          }
+        }else{
+        stats[intent] = {};
+        stats[intent]["total"] = 1;
+          if( status == "Complete" ){
+            stats[intent]["complete"] = 1;
+            stats[intent]["need_attention"] = 0;
+          }else{
+            stats[intent]["need_attention"] = 1;
+            stats[intent]["complete"] = 0;
+          }
+        }
+
+    }
+
+    console.log(stats);
+
+    res.send(stats);
+  });
+});
+
+
 // /**
 //  * HOW TO Make an HTTP Call - GET
 //  */
