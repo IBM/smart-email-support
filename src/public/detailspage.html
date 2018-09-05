@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,64 +10,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <style>
-        table, th 
-        {
-            margin:10px 0;
-            border:solid 1px #333;
-            padding:2px 4px;
-            font:15px Verdana;
-            border-collapse: collapse;
-            background-color: hsl(159, 51%, 88%);
-        }
-        th {
-            font-weight:bold;
-            background-color: lightgray;
-            text-align: left;
-        }
-        button {
-            background-color: lightblue;
-            font-size: 16px;
-            padding: 10px;
-            border-radius: 12px;
-        }
-            /* Remove the navbar's default margin-bottom and rounded borders */ 
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-    }
-    
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
-    
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-    
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #555;
-      color: white;
-      padding: 15px;
-    }
-    
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;} 
-    }
-    </style>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+
 </head>
 <script>
-        id = window.location.search.substring(1).split('=')[1];
+    id = window.location.search.substring(1).split('=')[1];
 
-    function getEmailDetails(){
+    function getEmailDetails() {
         URL = "http://localhost:6014/rest/emailDetails/" + id;
 
         var xmlhttp = new XMLHttpRequest();
@@ -77,9 +27,6 @@
         //alert(typeof(xmlhttp.responseText));
         var responseJSON = JSON.parse(xmlhttp.responseText);
         //alert(responseJSON.docs.length);
-
-        console.log("Details data");
-        console.log(responseJSON);
 
         var emailTable = document.createElement("table");
         emailTable.setAttribute('id', 'email');
@@ -101,7 +48,7 @@
 
         var divContainer = document.getElementById("emailData");
         divContainer.innerHTML = "";
-        divContainer.appendChild(emailTable); 
+        divContainer.appendChild(emailTable);
 
         var entities = responseJSON.summarySection.entities;
         keys = Object.keys(entities)
@@ -114,10 +61,10 @@
         th.innerHTML = "Request type: " + responseJSON.summarySection.requestType;
         tr.appendChild(th);
         var isAnyInfoMissing = false;
-        for (var i = 0; i < keys.length; i++) { 
+        for (var i = 0; i < keys.length; i++) {
             tr = summaryTable.insertRow(-1);
             td = tr.insertCell(-1);
-            if( !entities[keys[i]] || entities[keys[i]].length == 0 ){
+            if (!entities[keys[i]] || entities[keys[i]].length == 0) {
                 td.setAttribute("style", "color:red");
                 isAnyInfoMissing = true;
             }
@@ -125,7 +72,7 @@
         }
         divContainer = document.getElementById("summaryData");
         divContainer.innerHTML = "";
-        divContainer.appendChild(summaryTable); 
+        divContainer.appendChild(summaryTable);
 
         var replyTable = document.createElement("table");
         replyTable.setAttribute('id', 'reply');
@@ -140,7 +87,7 @@
         td.innerHTML = responseJSON.replySection.replyText;
 
         // Add button only if email is to be sent for additional information
-        if( isAnyInfoMissing ){
+        if (isAnyInfoMissing) {
 
             tr = replyTable.insertRow(-1);
             td = tr.insertCell(-1);
@@ -154,10 +101,10 @@
 
         divContainer = document.getElementById("replyData");
         divContainer.innerHTML = "";
-        divContainer.appendChild(replyTable); 
+        divContainer.appendChild(replyTable);
     }
 
-    function sendmail(){
+    function sendmail() {
         //alert("This function is to send email for id " + id);
 
         URL = "http://localhost:6014/rest/emailsender/" + id;
@@ -170,22 +117,27 @@
         //alert(typeof(xmlhttp.responseText));
         var response = xmlhttp.responseText;
         //alert(responseJSON.docs.length);
-        if( response == "success" ){
+        if (response == "success") {
             alert("Email sent successfully");
         }
-        if( response == "failure" ){
+        if (response == "failure") {
             alert("Error sending email");
         }
     }
 
 </script>
+
 <body onload="getEmailDetails()">
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav" style="width: 100%">
-                    <li><a href="./overview.html">Overview</a></li>
-                    <li><a href="./emails.html">Emails</a></li>
+                <ul class="nav navbar-nav" style="width: 100%">
+                    <li>
+                        <a href="./index.html">Overview</a>
+                    </li>
+                    <li>
+                        <a href="./emails.html">Emails</a>
+                    </li>
                     <li style="text-align: center; width: 80%; font-size: x-large">
                         <a href="#">Email Support Classifier</a>
                     </li>
@@ -199,9 +151,14 @@
         </div>
     </div>
     <br>
-        
+
     <div id="emailData"></div>
-    <br/><br/><div id="summaryData"></div>
-    <br/><br/><div id="replyData"></div>
+    <br/>
+    <br/>
+    <div id="summaryData"></div>
+    <br/>
+    <br/>
+    <div id="replyData"></div>
 </body>
+
 </html>

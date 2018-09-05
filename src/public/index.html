@@ -1,26 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
-  <head>
-    <title>NodeJS Starter Application</title>
+<head>
+    <title>Email Support - Overview</title>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="stylesheets/style.css">
-  </head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+</head>
 
-  <body>
-    <table>
-      <tr>
-        <td style= "width:30%;">
-          <img class = "newappIcon" src="images/newapp-icon.png">
-        </td>
-        <td>
-          <h1 id="message">Hello World!</h1>
-          <p class='description'></p> Thanks for creating a <span class = "blue">NodeJS Starter Application</span>.
-        </td>
-      </tr>
-    </table>
-  </body>
+<body onload="loadStats()">
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav" style="width: 100%">
+                    <li class="active">
+                        <a href="./index.html">Overview</a>
+                    </li>
+                    <li>
+                        <a href="./emails.html">Emails</a>
+                    </li>
+                    <li style="text-align: center; width: 80%; font-size: x-large">
+                        <a href="#">Email Support Classifier</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center">
+        <h3>Overview</h3>
+        <br>
+        <div class="row" id="overview-row">
+        </div>
+    </div>
+    <br>
+
+</body>
+
+<script>
+    function loadStats() {
+        URL = "http://localhost:6014/rest/overview";
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", URL, false);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        //xmlhttp.onreadystatechange = callbackFunction(xmlhttp);
+        xmlhttp.send();
+        //alert(typeof(xmlhttp.responseText));
+        var overviewData = JSON.parse(xmlhttp.responseText);
+
+        var parentDiv = document.getElementById("overview-row");
+        if (overviewData) {
+            for (var intent in overviewData) {
+                if (overviewData.hasOwnProperty(intent)) {
+                    var total = overviewData[intent]["total"];
+                    var complete = overviewData[intent]["complete"];
+                    var need_attention = overviewData[intent]["need_attention"];
+                    var div = document.createElement("div");
+                    div.setAttribute("class", "col-md-4");
+                    div.setAttribute("style", "background-color: lightgray");
+                    var p = document.createElement("p");
+                    p.setAttribute("style", "text-align: left; font-weight:bold; font-size: x-large");
+                    p.innerHTML = intent;
+                    div.appendChild(p);
+                    p = document.createElement("p");
+                    p.setAttribute("style", "text-align: left");
+                    p.innerHTML = "Total:" + total;
+                    div.appendChild(p);
+                    p = document.createElement("p");
+                    p.setAttribute("style", "text-align: left");
+                    p.innerHTML = "Complete:" + complete;
+                    div.appendChild(p);
+                    p = document.createElement("p");
+                    p.setAttribute("style", "text-align: left");
+                    p.innerHTML = "Need Attention:" + need_attention;
+                    div.appendChild(p);
+                    parentDiv.appendChild(div);
+
+                    div = document.createElement("div");
+                    div.setAttribute("class", "col-sm-1");
+                    parentDiv.appendChild(div);
+                }
+            }
+        }
+    }
+
+
+</script>
 
 </html>

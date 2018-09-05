@@ -1,84 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Email Support - Emails List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
-    <style>
-        table, th, td 
-        {
-            margin:10px 0;
-            border:solid 1px #333;
-            padding:2px 4px;
-            font:15px Verdana;
-            border-collapse: collapse;
-            background-color: hsl(159, 51%, 88%);
-        }
-        th {
-            font-weight:bold;
-            background-color: lightgray;
-            text-align: left;
-        }
-            /* Remove the navbar's default margin-bottom and rounded borders */ 
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-    }
-    
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
-    
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-    
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #555;
-      color: white;
-      padding: 15px;
-    }
-    
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;} 
-    }
-    </style>
+    <link rel="stylesheet" href="./stylesheets/style.css">
 </head>
+
 <body onload="loadEmails()">
     <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav" style="width: 100%">
-                        <li><a href="./overview.html">Overview</a></li>
-                        <li class="active"><a href="./emails.html">Emails</a></li>
-                        <li style="text-align: center; width: 80%; font-size: x-large">
-                                <a href="#">Email Support Classifier</a>
-                        </li>
-                    </ul>
-                </div>
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav" style="width: 100%">
+                    <li>
+                        <a href="./index.html">Overview</a>
+                    </li>
+                    <li class="active">
+                        <a href="./emails.html">Emails</a>
+                    </li>
+                    <li style="text-align: center; width: 80%; font-size: x-large">
+                        <a href="#">Email Support Classifier</a>
+                    </li>
+                </ul>
             </div>
-            </nav>
-       
-<div class="container text-center">
-    <h3>List of emails</h3>
-    <div class="row" id="overview-row">
-    </div>
-</div>
-<br>
+        </div>
+    </nav>
 
-                
-<div id="showData"></div>
+    <div class="container text-center">
+        <h3>List of emails</h3>
+        <div class="row" id="overview-row">
+        </div>
+    </div>
+    <br>
+
+
+    <div id="showData"></div>
 </body>
 
 <script>
@@ -122,8 +81,8 @@
             var th = document.createElement("th");      // TABLE HEADER.
             th.innerHTML = col[i];
             tr.appendChild(th);
-            if( i == 0 ){
-                th.style.display='none'; // to hide _id column header
+            if (i == 0) {
+                th.style.display = 'none'; // to hide _id column header
             }
         }
 
@@ -135,8 +94,8 @@
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 tabCell.innerHTML = emailsView[i][col[j]];
-                if( j == 0 ){
-                    tabCell.style.display='none'; // to hide _id column
+                if (j == 0) {
+                    tabCell.style.display = 'none'; // to hide _id column
                 }
 
             }
@@ -145,13 +104,13 @@
         // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
         var divContainer = document.getElementById("showData");
         divContainer.innerHTML = "";
-        divContainer.appendChild(table); 
+        divContainer.appendChild(table);
 
-        addEvents();    
+        addEvents();
     }
 
 
-    function getNeededFieldsInOrder(docs){
+    function getNeededFieldsInOrder(docs) {
         var responseView = [];
         for (var i = 0; i < docs.length; i++) {
             var doc = docs[i];
@@ -167,14 +126,14 @@
         return responseView;
     }
 
-    function getFormattedDateTime(timestamp){
-        if( !timestamp ){
+    function getFormattedDateTime(timestamp) {
+        if (!timestamp) {
             return '';
         }
         var d = new Date(timestamp),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
         hour = d.getHours();
         min = d.getMinutes();
 
@@ -187,7 +146,7 @@
     }
 
 
-    function addEvents(){
+    function addEvents() {
         var table = document.getElementsByTagName("table")[0];
         var tbody = table.getElementsByTagName("tbody")[0];
         tbody.onclick = function (e) {
@@ -204,9 +163,10 @@
         }
     };
 
-    function callAnotherAPI(id){
+    function callAnotherAPI(id) {
         //alert("To call another API with data " + id);
-        window.location = '/detailspage.html?id='+id;
+        window.location = '/detailspage.html?id=' + id;
     }
 </script>
+
 </html>

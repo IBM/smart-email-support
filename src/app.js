@@ -79,7 +79,7 @@ app.get('/rest/emails', function(req, res){
       }
     
       console.log('No of documents in database email', result.docs.length);
-      console.log(result);
+      //console.log(result);
   
       res.send(result);
   });
@@ -123,7 +123,7 @@ app.get('/rest/emails/:_id', function(req, res){
     }
 
     console.log('No of documents in database email', result.docs.length);
-    console.log(result);
+    //console.log(result);
 
     res.send(result);
   });
@@ -167,7 +167,7 @@ app.get('/rest/emailDetails/:_id', function(req, res){
     console.log('No of documents in database email', result.docs.length);
     //console.log(result);
     result = result.docs[0];
-    console.log(result.subject)
+    //console.log(result.subject)
     var emailDetails = {};
     emailDetails.emailSection = {};
     emailDetails.summarySection = {};
@@ -423,7 +423,7 @@ app.get('/rest/overview', function(req, res){
     }
 
     console.log('No of documents in database email', result.docs.length);
-    console.log(result);
+    //console.log(result);
 
     var stats = {};
 
@@ -431,7 +431,7 @@ app.get('/rest/overview', function(req, res){
       var doc = result.docs[i];
       var intent = doc.requestType;
       var status = doc.status;
-      console.log(status)
+      //console.log(status)
       // intents change_plan, enable_service, disable_service, add_family_member_to_plan
       if( stats[intent] ){
         stats[intent]["total"] += 1;
@@ -454,8 +454,7 @@ app.get('/rest/overview', function(req, res){
 
     }
 
-    console.log(stats);
-
+    //console.log(stats);
     res.send(stats);
   });
 });
