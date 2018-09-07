@@ -59,9 +59,9 @@ if( process.env.VCAP_SERVICES ){
       process.env = {}
     }
     process.env.support_email_id = 'patternemailautomation@gmail.com';
-    process.env.sendgrid_api_key = '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';
-    me = '827075d4-ef5f-4ef2-b87e-c54ecf0c0805-bluemix';
-    password = 'a53388fb905199503265c9559c5025a49b6028d20015c546dd7706bc47b92fd2'
+    process.env.sendgrid_api_key = '';
+    me = '';
+    password = ''
     //process.exit(1);
 }
 
