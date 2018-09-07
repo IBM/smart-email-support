@@ -1,0 +1,14 @@
+---
+applications:
+  - path: .
+    name: EmailSupportAutomationApp
+    environment_json: {}
+    memory: 256M
+    instances: 1
+    disk_quota: 1024M
+    random-route: true
+    services:
+    - Cloudant NoSQL DB-2g
+    env:
+      support_email_id: patternemailautomation@gmail.com
+      sendgrid_api_key: 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

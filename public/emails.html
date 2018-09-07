@@ -43,7 +43,7 @@
 <script>
 
     function loadEmails() {
-        URL = "http://localhost:6014/rest/emails";
+        URL = "http://" + window.location.hostname + ":" + window.location.port + "/rest/emails";
 
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", URL, false);
