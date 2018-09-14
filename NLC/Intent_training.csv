@@ -1,0 +1,23 @@
+﻿Sentence,Intent
+Can you please change my mobile plan from Unlimited to Infinity,change_plan
+Please update my plan to Infinity,change_plan
+Plan update from unlimited to Infinity,change_plan
+Hi. I am Muralidhar Chavan. I want to migrate to Inifinity,change_plan
+Hi. I want to move to new plan Infinity,change_plan
+Please enable service Roaming on my number,enable_service
+Hi My mobile number is 1000000001. Please enable international roaming on this number,enable_service
+Enable missed call alerts service,enable_service
+Please enable DND service,enable_service
+Add data service to my number,enable_service
+my number is 1000000001. Add missed call alerts service,enable_service
+Please disable service Roaming on my number,disable_service
+Hi My mobile number is 1000000001. Please disable international roaming on this number,disable_service
+Disale missed call alerts service,disable_service
+Please disable DND service,disable_service
+Remove data service to my number,disable_service
+my number is 1000000001. Remove missed call alerts service,disable_service
+Hi. Please add my wife Hemavathi Rathod to my family plan. Her phone number is 1000000002,add_family_member_to_plan
+Add my son to my fmaily plan. His name is Ayush Chavan and phone number is 100000003,add_family_member_to_plan
+Include my father in my plan. His name is Nanappa and his mobile phone number is 9000000001,add_family_member_to_plan
+"Add my mother, Hemalatha, to family plan. Her phone no is 9000000002",add_family_member_to_plan
+Include my daughter in family plan. He name is Kaveri and phone no is 9000000003,add_family_member_to_plan
