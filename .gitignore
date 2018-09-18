@@ -1,3 +1,4 @@
 node_modules
 .DS_Store
 frontend/e2e
+config.json
