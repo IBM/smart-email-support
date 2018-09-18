@@ -117,8 +117,9 @@ change directory to `email-support-classifier`.
     - Click on `customer_data` database
     - On the right top corner click on `Create Document`.
     - Then add customer data in the following format.
+
     > Only \_id, first_name, last_name, email and phone_no are mandatory
-    
+
     ```
     {
       "_id": "<email id of customer>",
@@ -158,7 +159,7 @@ change directory to `email-support-classifier`.
 - [Create Watson NLC](https://console.bluemix.net/catalog/services/natural-language-classifier) service
 - Select appropriate region, org and space and click `Create`.
 - Click `Show Credentials` and make a note of `Username` and `password`.
-- In a command prompt, change directory to <git repo parent folder>/NLC
+- In a command prompt, change directory to ``<git repo parent folder>/NLC``
 - Run the below command after updating *Username* and *password* with NLC instance's username and password noted in previous step.
 ```
 curl -i --user "username":"password" -F training_data=@./Intent_training.csv -F training_metadata="{\"language\":\"en\",\"name\":\"NLClassifier\"}" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
@@ -168,12 +169,12 @@ curl -i --user "username":"password" -F training_data=@./Intent_training.csv -F 
 ```
 curl -u "username":"password"  "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
 ```
-- Make a note of "classifier_id"
+- Make a note of *classifier_id*
 
 
 ## 5. Setup and deploy Node-RED flow
 
-## 5.1 Create Node-RED service
+### 5.1 Create Node-RED service
 - Login to IBM Cloud and click on `Create resource`.
 - In the search field type node-red.
 - Click on `Node-RED Starter`.
@@ -181,10 +182,10 @@ curl -u "username":"password"  "https://gateway.watsonplatform.net/natural-langu
 - The service should get created.
 
 
-## 5.2 Deploy Node-RED flow
+### 5.2 Deploy Node-RED flow
 - Import Node-Red flow
   - In the cloned project folder, navigate to `Node-RED` folder and open the contents of the file `node-red-flow.json` in a text editor.
-  - Copy the contents to clipboard.
+  - Copy the contents (to clipboard).
   - In IBM Cloud dashboard click on Node-RED service created in the above [section](#51-create-node-red-service).
   - Click on `Visit App URL`.
   - On the `Welcome to your new Node-RED` page click `next`.
@@ -224,7 +225,6 @@ Sendgrid service is used to send emails from our application to customers.
 
 ## 7. Deploy application and send emails
 - Go to the cloned project parent folder and open manifest.yml in any text editor.
-- Update *name* to a unique application name.
 - In command prompt, change directory to cloned project parent folder.
 - Under *services* update the Cloudant service instance name.
 - On command prompt, login to IBM Cloud using `ibmcloud login` or `ibmcloud login --sso` (for federated login).
