@@ -93,9 +93,9 @@ change directory to `email-support-classifier`.
 - [Create WKS instance](https://console.bluemix.net/catalog/services/knowledge-studio)
 - Go to IBM Cloud dashboard. Click on the WKS instance created in previous step. Click on `Launch Tool`.
 - Click on `Create Workspace`. Enter a name for workspace and click `Create`.
-- In WKS tool left side-bar navigation, go to `Assets` -> `Entity types`. Click `Upload`. Click on the download icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select the .json file and click `Open`. Then click `Upload`. Entity types should be populated.
-- Navigate to `Assets` -> `Documents`. Click on `Upload Document Sets`. Click on the download icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select the zip file and click `Upload`. Document sets should be loaded.
-- In WKS tool left side-bar navigation, go to  `Machine Learning Models` -> `Performance`. Click `Train and Evaluate`. Select `All` under `Document Set` and click on `Train and Evaluate`. Training will commence and can be seen at the top right corner of the screen which shows the message `Train Processing...`.
+- In WKS tool left side-bar navigation, go to `Assets` -> `Entity types`. Click `Upload`. Click on the icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select the .json file and click `Open`. Then click `Upload`. Entity types should be populated.
+- Navigate to `Assets` -> `Documents`. Click on `Upload Document Sets`. Click on the icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select the zip file and click `Upload`. Document sets should be loaded.
+- In WKS tool left side-bar navigation, go to  `Machine Learning Models` -> `Performance`. Click `Train and Evaluate`. Select `All` under `Document Set` and click on `Train and Evaluate`. Training will commence and can be seen at the top right corner of the screen which shows the message `Train Processing...`. This process will take about 10 minutes to complete the training process.
 - When the training is done it should display a message `Machine Learning Model Evaluation Complete`.
 - Navigate to `Machine Learning Models` -> `Versions`. Click `Take Snapshot`. Enter `Description` (optional) and click `OK`
 - Click `Deploy`. Select `Natural Language Understanding`. Click `Next`. Select appropriate region and space. From the Service name drop down select the NLU instance that was created in [section](#21-create-nlu-service). Click `Deploy`.
@@ -118,6 +118,7 @@ change directory to `email-support-classifier`.
     - On the right top corner click on `Create Document`.
     - Then add customer data in the following format.
     > Only \_id, first_name, last_name, email and phone_no are mandatory
+    
     ```
     {
       "_id": "<email id of customer>",
