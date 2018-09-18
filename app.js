@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 // for more info, see: http://expressjs.com
 var express = require('express');
 var app = express();
-var https = require('https');
+var https = require('http');
 var router = express.Router();
 app.use(cors());
 app.use(bodyParser.json());
@@ -58,10 +58,11 @@ if( process.env.VCAP_SERVICES ){
     if( !process.env ){
       process.env = {}
     }
+    var config = require('./config.json');
     process.env.support_email_id = 'patternemailautomation@gmail.com';
-    process.env.sendgrid_api_key = '';
-    me = '';
-    password = ''
+    process.env.sendgrid_api_key = config.sendgrid_api_key;
+    me = config.me;
+    password = config.password
     //process.exit(1);
 }
 

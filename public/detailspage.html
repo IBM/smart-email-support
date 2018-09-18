@@ -17,7 +17,7 @@
     id = window.location.search.substring(1).split('=')[1];
 
     function getEmailDetails() {
-        URL = "http://" + window.location.hostname + ":" + window.location.port + "/rest/emailDetails/" + id;
+        URL = "https://" + window.location.hostname + ":" + window.location.port + "/rest/emailDetails/" + id;
 
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", URL, false);
@@ -107,7 +107,7 @@
     function sendmail() {
         //alert("This function is to send email for id " + id);
 
-        URL = "http://" + window.location.hostname + ":" + window.location.port + "/rest/emailsender/" + id;
+        URL = "https://" + window.location.hostname + ":" + window.location.port + "/rest/emailsender/" + id;
 
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", URL, false);
