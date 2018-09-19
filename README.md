@@ -45,6 +45,7 @@ Coming soon
 * [Watson Natural Language Classifier](https://www.ibm.com/watson/services/natural-language-classifier/): The Natural Language Classifier service applies cognitive computing techniques to return the best matching classes for a sentence or phrase.
 * [Node-RED](https://console.bluemix.net/docs/starters/Node-RED/nodered.html#nodered): Node-RED provides a browser-based flow editor that makes it easy to wire together devices, APIs, and online services by using the wide range of nodes in the palette.
 * [SDK of Node.js](https://console.bluemix.net/docs/runtimes/nodejs/index.html#nodejs_runtime): The Node.js runtime on IBM® Cloud is powered by the sdk-for-nodejs buildpack. The sdk-for-nodejs buildpack provides a complete runtime environment for Node.js apps.
+* [Cloudant](https://console.bluemix.net/catalog/services/cloudant): IBM Cloudant is a fully managed JSON document database.
 
 
 ## Featured technologies
@@ -55,14 +56,14 @@ Coming soon
 
 # Steps
 Follow these steps to setup and run this code pattern. The steps are described in detail below.
-1. Prerequisites
-2. Deploy WKS model to NLU
-3. Create WKS Cloudant databases
-4. Create NLC Instance
-5. Setup and deploy Node-RED flow
-6. Setup SendGrid service
-7. Deploy application
-8. Run the application
+1. [Prerequisites](#1-prerequisites)
+2. [Deploy WKS model to NLU](#2-deploy-wks-model-to-nlu)
+3. [Create Cloudant databases](#3-create-cloudant-databases)
+4. [Create NLC Instance](#4-create-nlc-nstance)
+5. [Setup and deploy Node-RED flow](#5-setup-and-deploy-node-red-flow)
+6. [Setup SendGrid service](#6-setup-sendgrid-service)
+7. [Deploy application](#7-deploy-application)
+8. [Run the application](#8-run-the-application)
 
 
 ## 1. Prerequisites
@@ -102,7 +103,7 @@ change directory to `email-support-classifier`.
 - When deployed make a note of the model id. Click `OK`.
 
 
-## 3. Create WKS Cloudant databases
+## 3. Create Cloudant databases
 - Create Cloudant service instance on IBM Cloud using this [link](https://console.bluemix.net/docs/services/Cloudant/tutorials/create_service.html#creating-an-ibm-cloudant-instance-on-ibm-cloud)
 - Create email database
   - On IBM Cloud dashboard, click the Cloudant service instance created in above step. On the left navigation bar of the service instance, click `Manage`. Then click `Launch Cloudant Dashboard`.
