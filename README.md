@@ -1,5 +1,5 @@
 # Work in progress
-# email-support-classifier
+# smart-email-support
 
 Providing customer support in a timely manner is very important to enhance customer experience. Organisations receive communication, from their customers, through various channels like emails, phone calls, applications etc. Organisations need to understand the intent and content of each of the communication and ask customers for any additional information required to fulfil their requests.
 
