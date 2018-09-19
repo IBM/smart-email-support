@@ -59,10 +59,10 @@ Follow these steps to setup and run this code pattern. The steps are described i
 1. [Prerequisites](#1-prerequisites)
 2. [Deploy WKS model to NLU](#2-deploy-wks-model-to-nlu)
 3. [Create Cloudant databases](#3-create-cloudant-databases)
-4. [Create NLC Instance](#4-create-nlc-nstance)
+4. [Create NLC Instance](#4-create-nlc-instance)
 5. [Setup and deploy Node-RED flow](#5-setup-and-deploy-node-red-flow)
 6. [Setup SendGrid service](#6-setup-sendgrid-service)
-7. [Deploy application](#7-deploy-application)
+7. [Deploy application](#7-deploy-application-and-send-emails)
 8. [Run the application](#8-run-the-application)
 
 
