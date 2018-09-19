@@ -62,7 +62,7 @@ Follow these steps to setup and run this code pattern. The steps are described i
 4. [Create NLC Instance](#4-create-nlc-instance)
 5. [Setup and deploy Node-RED flow](#5-setup-and-deploy-node-red-flow)
 6. [Setup SendGrid service](#6-setup-sendgrid-service)
-7. [Deploy application](#7-deploy-application-and-send-emails)
+7. [Deploy application and send emails](#7-deploy-application-and-send-emails)
 8. [Run the application](#8-run-the-application)
 
 
