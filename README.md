@@ -20,7 +20,7 @@ After completing this pattern, you will learn how to:
 
 # Watch the Overview Video
 
-Coming soon
+[![](https://img.youtube.com/vi/AT477px19gQ/0.jpg)](https://youtu.be/AT477px19gQ)
 
 
 # Flow
