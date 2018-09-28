@@ -1,8 +1,8 @@
 # Smart Email Support
 
-Providing customer support in a timely manner is very important to enhance customer experience. Organisations receive communication, from their customers, through various channels like emails, phone calls, applications etc. Organisations need to understand the intent and content of each of the communication and ask customers for any additional information required to fulfil their requests.
+Providing customer support in a timely manner is very important to enhance customer experience. Organisations receive communication, from their customers, through various channels like emails, phone calls, applications etc. Organisations need to understand the intent and content of each of the communication and ask customers for any additional information required to fulfil their requests. Manually processing each email request requires a lot of time to go through the emails, understand them and respond to them in a quick and appropriate manner. Additionally, manual processing is error prone. Delay in acting on customer requests could affect customer satisfaction levels. This code pattern addresses these issues. It will demonstrates Watson’s ability to automate email responses that are related to business processes. Customers will benefit from more timely responses and clear instructions for what information is needed in order to fulfill their requests.
 
-In this code pattern we take an use case of a telecom domain customer support who action on email requests they receive from customer. We will consider request scenarios for **enabling a service**, **disabling a service**, **changing plan** and **Adding family member to plan**.
+In this code pattern we take use cases of a telecom domain customer support who need to action upon email requests they receive from customer. We will consider request scenarios for **enabling a service**, **disabling a service**, **changing plan** and **Adding family member to plan**.
 
 As a customer support, one should
 - Know intent of email.
@@ -10,12 +10,12 @@ As a customer support, one should
 - Identify information that is missing.
 - Auto-compose responses and send emails.
 
-This code pattern provides an automatic and cognitive way of achieving the above requirements. It uses natural language processing of emails, understanding intents of emails, auto composing responses and providing a dashboard with high level summary of intents and emails. While the use case demonstrated here is for a telecom domain, it can be applied to any domain. It integrates with database, which acts as a CRM, to pull customer information to validate emails and requests. It uses Watson Knowledge Studio for custom domain natural language processing, Watson Natural Language Understanding to deploy custom domain model and get entities from emails, Watson Natural Language Classifier to get intent of email, CloudantNoSQL database to store emails and customer data, Node-RED to integrate with emails, Watson services and Cloudant database, Node runtime for user interface application.
+This code pattern provides an automatic and cognitive way of achieving the above requirements. It uses natural language processing of emails, understanding intents of emails, auto composing responses and providing a dashboard with high level summary of intents and emails. While the use case demonstrated here is for a telecom domain, it can be applied to any domain. It integrates with database, which acts as a CRM, to pull customer information to validate emails and requests. It uses Watson Knowledge Studio for custom domain natural language processing, Watson Natural Language Understanding(NLU) to deploy custom domain model and get entities from emails, Watson Natural Language Classifier(NLC) to get intent of email, IBM Cloudant database to store emails and customer data, Node-RED to integrate with emails, Watson services and IBM Cloudant database, Node runtime for user interface application.
 
 After completing this pattern, you will learn how to:
 - Build a custom model using Watson Knowledge Studio and deploy it on Watson Natural Language Understanding.
-- Build a Node-RED flow that integrates email server, Watson services (NLU and NLC) and Cloudant database.
-- Deploy application, send sample customer emails and see the emails being auto processed using a simple UI.
+- Build a Node-RED flow that integrates email server, Watson services (NLU and NLC) and IBM Cloudant database.
+- Deploy application, send sample customer emails and see the emails being auto processed using a simple user interface.
 
 
 # Watch the Overview Video
@@ -26,25 +26,25 @@ After completing this pattern, you will learn how to:
 # Flow
 ![Architecture](images/Architecture.png)
 
-1. Deploy custom model, built using Watson Knowledge Studio , to Watson Natural Language Understanding.
-2. Node-RED flow polls for new emails and retrieves new emails, if any.
-3. Node-RED flow retrieves customer data from Cloudant database.
-4. Watson NLU identifies entities in email.
-5. Get intent of email using Watson NLC.
-6. Email details, entities, intent are all stored in database.
-7. User accesses application deployed on IBM cloud.
-8. Application gets email data from database.
-9. Auto composed emails can be sent to users.
+1. Deploy custom model, built for telecom use cases using Watson Knowledge Studio, to Watson Natural Language Understanding.
+2. Node-RED flow gets (polls) for customer emails and retrieves them.
+3. Customers are validated by matching customer email id and customer data available in Cloudant database for customer records.
+4. Information (entities like name, phone number) in emails are identified using Watson NLU.
+5. Intent (or service request type) of email is identified using Watson NLC.
+6. Email content, entities, intent are saved in Cloudant email database for each request.
+7. Customer support user accesses nodejs application deployed on IBM cloud.
+8. Application fetches emails, entities and intents from Cloudant email database.
+9. Responses to email are auto populated (auto composed) and customer support user can just click the send button to send response to customer.
 
 
 ## Included components
 
-* [Watson Knowledge Studio](https://console.bluemix.net/docs/services/knowledge-studio/index.html#wks_overview_full): Use IBM Watson™ Knowledge Studio to create a machine-learning model that understands the linguistic nuances, meaning, and relationships specific to your industry or to create a rule-based model that finds entities in documents based on rules that you define.
+* [Watson Knowledge Studio](https://console.bluemix.net/docs/services/knowledge-studio/index.html#wks_overview_full): Use IBM Watson™ Knowledge Studio(WKS) to create a machine-learning model that understands the linguistic nuances, meaning, and relationships specific to your industry or to create a rule-based model that finds entities in documents based on rules that you define.
 * [Watson Natural Language Understanding](https://www.ibm.com/watson/services/natural-language-understanding/): A IBM Cloud service that can analyse text to extract meta-data from content such as concepts, entities, keywords, categories, sentiment, emotion, relations, semantic roles, using natural language understanding.
 * [Watson Natural Language Classifier](https://www.ibm.com/watson/services/natural-language-classifier/): The Natural Language Classifier service applies cognitive computing techniques to return the best matching classes for a sentence or phrase.
 * [Node-RED](https://console.bluemix.net/docs/starters/Node-RED/nodered.html#nodered): Node-RED provides a browser-based flow editor that makes it easy to wire together devices, APIs, and online services by using the wide range of nodes in the palette.
 * [SDK of Node.js](https://console.bluemix.net/docs/runtimes/nodejs/index.html#nodejs_runtime): The Node.js runtime on IBM® Cloud is powered by the sdk-for-nodejs buildpack. The sdk-for-nodejs buildpack provides a complete runtime environment for Node.js apps.
-* [Cloudant](https://console.bluemix.net/catalog/services/cloudant): IBM Cloudant is a fully managed JSON document database.
+* [IBM Cloudant](https://console.bluemix.net/catalog/services/cloudant): IBM Cloudant is a fully managed JSON document database.
 
 
 ## Featured technologies
@@ -53,20 +53,27 @@ After completing this pattern, you will learn how to:
 * [Artificial Intelligence](https://www.computerworld.com/article/2906336/emerging-technology/what-is-artificial-intelligence.html): Intelligence demonstrated by machines, in contrast to the natural intelligence displayed by humans.
 
 
-# Steps
+## Prerequisites
+- If not already installed, [download and install git](https://git-scm.com/downloads).
+- If not already installed, [install IBM Cloud CLI](https://console.bluemix.net/docs/cli/reference/ibmcloud/download_cli.html#install_use).
+- Familiarity with basic concepts of [Node-RED](https://nodered.org/docs/).
+
+> Create all the resources in the same region, organisation and space so that there will be no issues in accessing the services.
+> Whenever you login to IBM Cloud from command prompt, ensure that you log into the right region, organisation and space by running the command `ibmcloud target`.
+
+## Steps
 Follow these steps to setup and run this code pattern. The steps are described in detail below.
-1. [Prerequisites](#1-prerequisites)
+1. [Clone git repo](#1-clone-git-repo)
 2. [Deploy WKS model to NLU](#2-deploy-wks-model-to-nlu)
-3. [Create Cloudant databases](#3-create-cloudant-databases)
-4. [Create NLC Instance](#4-create-nlc-instance)
+3. [Create IBM Cloudant databases](#3-create-cloudant-databases)
+4. [Create NLC Service Instance](#4-create-nlc-service-instance)
 5. [Setup and deploy Node-RED flow](#5-setup-and-deploy-node-red-flow)
 6. [Setup SendGrid service](#6-setup-sendgrid-service)
 7. [Deploy application and send emails](#7-deploy-application-and-send-emails)
 8. [Run the application](#8-run-the-application)
 
 
-## 1. Prerequisites
-- If not already installed, [download and install git](https://git-scm.com/downloads).
+## 1. Clone git repo
 - On command prompt run the below command to clone the git repo.
 ```
 git clone git@github.com:IBM/email-support-classifier.git
@@ -75,12 +82,7 @@ or
 ```
 git clone https://github.com/IBM/email-support-classifier.git
 ```
-change directory to `email-support-classifier`.
-- If not already installed, [install IBM Cloud CLI](https://console.bluemix.net/docs/cli/reference/ibmcloud/download_cli.html#install_use).
-- Familiarity with basic concepts of [Node-RED](https://nodered.org/docs/).
-
-> Create all the resources in the same region, organisation and space so that there will be no issues in accessing the services.
-> Whenever you login to IBM Cloud from command prompt, ensure that you log into the right region, organisation and space by running the command `ibmcloud target`.
+run `cd email-support-classifier` to change directory to project parent folder
 
 ## 2. Deploy WKS model to NLU
 
@@ -89,9 +91,9 @@ change directory to `email-support-classifier`.
 - Select appropriate region, organization and space. Select `Free` plan and click `Create`.
 - Click `Show Credentials` and save `Username` and `Password` in a file.
 
-### 2.2 Create WKS instance and build model
-- [Create WKS instance](https://console.bluemix.net/catalog/services/knowledge-studio)
-- Go to IBM Cloud dashboard. Click on the WKS instance created in previous step. Click on `Launch Tool`.
+### 2.2 Create WKS service instance and build model
+- [Create WKS service instance](https://console.bluemix.net/catalog/services/knowledge-studio)
+- Go to IBM Cloud dashboard. Click on the WKS service instance created in previous step. Click on `Launch Tool`.
 - Click on `Create Workspace`. Enter a name for workspace and click `Create`.
 - In WKS tool left side-bar navigation, go to `Assets` -> `Entity types`. Click `Upload`. Click on the icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select the .json file and click `Open`. Then click `Upload`. Entity types should be populated.
 - Navigate to `Assets` -> `Documents`. Click on `Upload Document Sets`. Click on the icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select the zip file and click `Upload`. Document sets should be loaded.
@@ -103,7 +105,7 @@ change directory to `email-support-classifier`.
 
 
 ## 3. Create Cloudant databases
-- Create Cloudant service instance on IBM Cloud using this [link](https://console.bluemix.net/docs/services/Cloudant/tutorials/create_service.html#creating-an-ibm-cloudant-instance-on-ibm-cloud).
+- Create IBM Cloudant service instance on IBM Cloud using this [link](https://console.bluemix.net/docs/services/Cloudant/tutorials/create_service.html#creating-an-ibm-cloudant-instance-on-ibm-cloud).
 - Create email database
   - On IBM Cloud dashboard, click the Cloudant service instance created in above step. On the left navigation bar of the service instance, click `Manage`. Then click `Launch Cloudant Dashboard`.
   - On the top right side of the screen, click on `Create Database`.
@@ -155,19 +157,19 @@ change directory to `email-support-classifier`.
 
     Similarly add all customer details who will send email requests.
 
-## 4. Create NLC Instance
+## 4. Create NLC Service Instance
 - [Create Watson NLC](https://console.bluemix.net/catalog/services/natural-language-classifier) service
 - Select appropriate region, org and space and click `Create`.
 - Click `Show Credentials` and make a note of `Username` and `password`.
 - In a command prompt, change directory to ``<git repo parent folder>/NLC``
-- Run the below command after updating *Username* and *password* with NLC instance's username and password noted in previous step.
+- Run the below command after updating *Username* and *password* with NLC service instance's username and password noted in previous step.
 ```
-curl -i --user "username":"password" -F training_data=@./Intent_training.csv -F training_metadata="{\"language\":\"en\",\"name\":\"NLClassifier\"}" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
+curl -i --user <username>:<password> -F training_data=@./Intent_training.csv -F training_metadata="{\"language\":\"en\",\"name\":\"NLClassifier\"}" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
 ```
-- The NLC instance will be trained with the training data *Intent_training.csv*. It takes a few minutes to train NLC.
+- The NLC service instance will be trained with the training data *Intent_training.csv*. It takes a few minutes to train NLC.
 - Get classifier id using the command
 ```
-curl -u "username":"password"  "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
+curl -u <username>:<password>  "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
 ```
 - Make a note of *classifier_id*.
 
@@ -201,14 +203,14 @@ curl -u "username":"password"  "https://gateway.watsonplatform.net/natural-langu
   - Double click to open `FromEmail` node. Update `Userid` and `Password` fields here. This is the customer support email id which needs to be monitored by organisations to receive emails from customers. For this code pattern, you can use your existing email id or create a new email account with gmail and provide the details here. Also, if required, update the refresh rate, which is in seconds, so that the node will look for new emails at regular intervals. The imported flow has a refresh rate of 360 seconds or 6 minutes. Click `Done`.
   - Double click on `customer_data_search` node.
   - Click the edit button against the field `Server`.
-  - Enter Cloudant database instance's `Host`, `Username` and `Password` and click `Update`. Click `Done`.
+  - Enter Cloudant database service instance's `Host`, `Username` and `Password` and click `Update`. Click `Done`.
   - Next we will need to update the Model Id of the WKS model that was deployed on NLU. Copy that model id to clipboard.
   - Double click `Add Model Id` node and update the model id against `msg.nlu_options.entity_model`. Click `Done`.
-  - Double click on `nlu` node and specify NLU instance credentials and click on `Done`.
-  - Double click on `NLClassifier` node. Update NLC credentials. Update classifier_id as noted in [this section](##4-create-nlc-instance). Click `Done`.
+  - Double click on `nlu` node and specify NLU service instance credentials and click on `Done`.
+  - Double click on `NLClassifier` node. Update NLC credentials. Update classifier_id as noted in [this section](##4-create-nlc-service-instance). Click `Done`.
   - Double click on `email db cloudant node`.
   - Click the edit button against the field `Server`.
-  - Enter Cloudant database instance's `Host`, `Username` and `Password` and click `Update`. Click `Done`.
+  - Enter Cloudant database service instance's `Host`, `Username` and `Password` and click `Update`. Click `Done`.
 - Deploy Node-RED flow and check if it is working fine.
   - Click on `Deploy` on the top right corner of the screen.
   - Send an email from your email id (which acts as customer email - ensure that this email details are updated in customer_data database) to customer support email id as updated in FromEmail node of Node-RED.
@@ -225,7 +227,7 @@ Sendgrid service is used to send emails from our application to customers.
 
 ## 7. Deploy application and send emails
 - Go to the cloned project parent folder and open manifest.yml in any text editor.
-- In command prompt, change directory to cloned project parent folder.
+- In command prompt, change directory to cloned project parent folder using command `cd email-support-classifier`.
 - Under *services* update the Cloudant service instance name.
 - On command prompt, login to IBM Cloud using `ibmcloud login` or `ibmcloud login --sso` (for federated login).
 - Run the below command to deploy the application to IBM Cloud.
@@ -271,20 +273,8 @@ We saw that emails sent by customers are categorised into different intents. Ema
 
 
 # Troubleshooting
-- The email that you sent is not reflecting in UI
-  - Wait for a little more than the refresh time specified in node red flow. By default it is 6 minutes, unless you have not updated the time. Check if the email is received after the refresh time.
-  - Email sender or customer should have his/her details updated in customer_data database of Cloudant. If not already done, add sender details in customer database.
-  - If the customer details are updated in database and still you are not getting emails in email database, then debug the Node-RED flow as detailed in below point.
-- Check if Node-RED flow is working fine and database is updated
-  - On IBM Cloud dashboard, open Node-RED application and go to Node-RED flow. Send an email request as described earlier and watch the debug tab. Check for errors. If any fix them and retry sending an email. If necessary add more debug nodes to identify where exactly is the problem occurring, if any.
-- When emails are sent from application, they are not received by customers
-  - Check if sendgrid API Key is correct.
-- Application throws error or behaves unexpectedly
-  - Check application logs to find if there are any application logs using the command `ibmcloud cf logs <app_name> --recent`.
-- In the application logs if you see errors pertaining to service unavailability
-  - check if you are logged into the right space on the command prompt.
-  - That the service is created.
-  - That the service details are rightly updated in Node-Red flow, manifest.yml file.
+See [Debigging.md](./Debugging.md)
+
 
 # License
 
