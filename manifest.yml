@@ -7,8 +7,8 @@ applications:
     instances: 1
     disk_quota: 1024M
     random-route: true
-    services:
-    - Cloudant NoSQL DB-2g
     env:
+      cloudant_username: <cloudant username>
+      cloudant_password: <cloudant password>
       support_email_id: patternemailautomation@gmail.com
       sendgrid_api_key: <sendgrid api key>

@@ -48,12 +48,17 @@ var password = '';
 if( process.env.VCAP_SERVICES ){
   env = JSON.parse(process.env.VCAP_SERVICES);
   cloudantNoSQLDBData = env['cloudantNoSQLDB'];
-  credentials = cloudantNoSQLDBData[0];
-  credentialsData = credentials['credentials'];
-  
-  me = credentialsData['username'];
-  password = credentialsData['password'];
+  if( cloudantNoSQLDBData && cloudantNoSQLDBData.length > 0 ){
+    credentials = cloudantNoSQLDBData[0];
+    credentialsData = credentials['credentials'];
+
+    me = credentialsData['username'];
+    password = credentialsData['password'];
   }else{
+    me = process.env.cloudant_username;
+    password = process.env.cloudant_password;
+  }
+}else{
     console.log("VCAP_SERVICES not found");
     if( !process.env ){
       process.env = {}
@@ -61,9 +66,8 @@ if( process.env.VCAP_SERVICES ){
     var config = require('./config.json');
     process.env.support_email_id = 'patternemailautomation@gmail.com';
     process.env.sendgrid_api_key = config.sendgrid_api_key;
-    me = config.me;
-    password = config.password
-    //process.exit(1);
+    me = process.env.cloudant_username;
+    password = process.env.cloudant_password;
 }
 
 var supportEmailId = process.env.support_email_id;
@@ -272,10 +276,12 @@ app.get('/rest/emailDetails/:_id', function (req, res) {
       for (var i = 0; i < missingData.length; i++) {
         replyText = replyText + "<br/>" + missingData[i];
       }
+      replyText = replyText + "<br/> Regards, <br/> Customer Support Team."
       emailDetails.status = "Incomplete";
     } else {
       replyText = "Thanks. We have all the information required to process this request. The request will be completed automatically";
       emailDetails.status = "Complete";
+      replyText = replyText + "<br/> Regards, <br/> Customer Support Team."
     }
     emailDetails.replySection.replyText = replyText;
 

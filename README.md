@@ -76,36 +76,56 @@ Follow these steps to setup and run this code pattern. The steps are described i
 ## 1. Clone git repo
 - On command prompt run the below command to clone the git repo.
 ```
-git clone git@github.com:IBM/email-support-classifier.git
+git clone git@github.com:IBM/smart-email-support.git
 ```
 or
 ```
-git clone https://github.com/IBM/email-support-classifier.git
+git clone https://github.com/IBM/smart-email-support.git
 ```
-run `cd email-support-classifier` to change directory to project parent folder
+run `cd smart-email-support` to change directory to project parent folder
+
 
 ## 2. Deploy WKS model to NLU
 
 ### 2.1 Create NLU service
-- [Create NLU Instance](https://console.bluemix.net/catalog/services/natural-language-understanding).
+- [Create NLU service Instance](https://console.bluemix.net/catalog/services/natural-language-understanding).
+- Enter any name that you like. For this code pattern we have service name as `wbc-Natural Language Understanding`.
+
+![NLUCreate](images/nlu-create.png)
+
 - Select appropriate region, organization and space. Select `Free` plan and click `Create`.
 - Click `Show Credentials` and save `Username` and `Password` in a file.
 
 ### 2.2 Create WKS service instance and build model
-- [Create WKS service instance](https://console.bluemix.net/catalog/services/knowledge-studio)
+- [Create WKS service instance](https://console.bluemix.net/catalog/services/knowledge-studio).
+- Enter any name that you like. For this code pattern we have service name as `wbc-Knowledge Studio`.
+
+![NLUCreate](images/wks-create.png)
+
+- Select appropriate region and resource group. Select `Lite` plan and click `Create`.
 - Go to IBM Cloud dashboard. Click on the WKS service instance created in previous step. Click on `Launch Tool`.
 - Click on `Create Workspace`. Enter a name for workspace and click `Create`.
-- In WKS tool left side-bar navigation, go to `Assets` -> `Entity types`. Click `Upload`. Click on the icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select the .json file and click `Open`. Then click `Upload`. Entity types should be populated.
-- Navigate to `Assets` -> `Documents`. Click on `Upload Document Sets`. Click on the icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select the zip file and click `Upload`. Document sets should be loaded.
-- In WKS tool left side-bar navigation, go to  `Machine Learning Models` -> `Performance`. Click `Train and Evaluate`. Select `All` under `Document Set` and click on `Train and Evaluate`. Training will commence and can be seen at the top right corner of the screen which shows the message `Train Processing...`. This process will take about 10 minutes to complete the training process.
+- In WKS tool left side-bar navigation, go to `Assets` -> `Entity types`. Click `Upload`. Click on the icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select `types-e9.json` file and click `Open`. Then click `Upload`. Entity types should be populated.
+- Navigate to `Assets` -> `Documents`. Click on `Upload Document Sets`. Click on the icon ![DownloadIcon](images/DownloadIcon.png) and browse to WKS folder in the cloned git repo and select corpus-e9.zip file. Let the options selected be default. click `Upload`. Document sets should be loaded.
+- In WKS tool left side-bar navigation, go to  `Machine Learning Models` -> `Performance`. Click `Train and Evaluate`.
+
+![TrainAndEvaluate1](images/TrainAndEvaluate1.png)
+
+- Select `All` under `Document Set` and click on `Train and Evaluate`. Training will commence and can be seen at the top right corner of the screen which shows the message `Train Processing...`. This process will take about 10 minutes to complete the training process.
+
+![train-processing](images/train-processing.png)
+
 - When the training is done it should display a message `Machine Learning Model Evaluation Complete`.
 - Navigate to `Machine Learning Models` -> `Versions`. Click `Take Snapshot`. Enter `Description` (optional) and click `OK`
+
+![wkssnapshot](images/wkssnapshot.png)
+
 - Click `Deploy`. Select `Natural Language Understanding`. Click `Next`. Select appropriate region and space. From the Service name drop down select the NLU instance that was created in [section](#21-create-nlu-service). Click `Deploy`.
 - When deployed make a note of the model id. Click `OK`.
 
 
 ## 3. Create Cloudant databases
-- Create IBM Cloudant service instance on IBM Cloud using this [link](https://console.bluemix.net/docs/services/Cloudant/tutorials/create_service.html#creating-an-ibm-cloudant-instance-on-ibm-cloud).
+- Create IBM Cloudant service instance on IBM Cloud using this [link](https://console.bluemix.net/docs/services/Cloudant/tutorials/create_service.html#creating-an-ibm-cloudant-instance-on-ibm-cloud). Select `Use both legacy credentials and IAM` when asked for authentication method.  While creating database you can use any name to create. For this code pattern we have considered `wbc-Cloudant`. Make a note of Cloudant Service credential username and password. Update username and password in <project_parent_folder>/manifest.yml file against keys `cloudant_username` and `cloudant_password`.
 - Create email database
   - On IBM Cloud dashboard, click the Cloudant service instance created in above step. On the left navigation bar of the service instance, click `Manage`. Then click `Launch Cloudant Dashboard`.
   - On the top right side of the screen, click on `Create Database`.
@@ -158,7 +178,11 @@ run `cd email-support-classifier` to change directory to project parent folder
     Similarly add all customer details who will send email requests.
 
 ## 4. Create NLC Service Instance
-- [Create Watson NLC](https://console.bluemix.net/catalog/services/natural-language-classifier) service
+- [Create Watson NLC](https://console.bluemix.net/catalog/services/natural-language-classifier) service instance.
+- Enter any name that you like. For this code pattern we have service name as `wbc-Natural Language Classifier`.
+
+![NLCCreate](images/nlc-create.png)
+
 - Select appropriate region, org and space and click `Create`.
 - Click `Show Credentials` and make a note of `Username` and `password`.
 - In a command prompt, change directory to ``<git repo parent folder>/NLC``
@@ -166,7 +190,7 @@ run `cd email-support-classifier` to change directory to project parent folder
 ```
 curl -i --user <username>:<password> -F training_data=@./Intent_training.csv -F training_metadata="{\"language\":\"en\",\"name\":\"NLClassifier\"}" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
 ```
-- The NLC service instance will be trained with the training data *Intent_training.csv*. It takes a few minutes to train NLC.
+- The NLC service instance will be trained with the training data *Intent_training.csv*. The command is executed with a information saying that it'll take sometime to train NLC. It takes a few minutes to train NLC.
 - Get classifier id using the command
 ```
 curl -u <username>:<password>  "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
@@ -177,10 +201,12 @@ curl -u <username>:<password>  "https://gateway.watsonplatform.net/natural-langu
 ## 5. Setup and deploy Node-RED flow
 
 ### 5.1 Create Node-RED service
-- Login to IBM Cloud and click on `Create resource`.
-- In the search field type node-red.
-- Click on `Node-RED Starter`.
-- Enter unique app name and choose appropriate region, org and space. Select Lite plan and click `Create`.
+- Click [Create Node-RED service instance] to create an instance of Node-Red.
+- Enter any name that you like. For this code pattern we have service name as `wbc-node-red`.
+
+![NodeRedCreate](images/node-red-create.png)
+
+- Select appropriate region, org and space and click `Create`.
 - The service should get created.
 
 
@@ -200,17 +226,23 @@ curl -u <username>:<password>  "https://gateway.watsonplatform.net/natural-langu
   - Paste the copied content here and click on `Import` button.
   - The Node-RED flow is now imported.
 - Update email and service details in Node-RED flow.
-  - Double click to open `FromEmail` node. Update `Userid` and `Password` fields here. This is the customer support email id which needs to be monitored by organisations to receive emails from customers. For this code pattern, you can use your existing email id or create a new email account with gmail and provide the details here. Also, if required, update the refresh rate, which is in seconds, so that the node will look for new emails at regular intervals. The imported flow has a refresh rate of 360 seconds or 6 minutes. Click `Done`.
-  - Double click on `customer_data_search` node.
-  - Click the edit button against the field `Server`.
-  - Enter Cloudant database service instance's `Host`, `Username` and `Password` and click `Update`. Click `Done`.
-  - Next we will need to update the Model Id of the WKS model that was deployed on NLU. Copy that model id to clipboard.
-  - Double click `Add Model Id` node and update the model id against `msg.nlu_options.entity_model`. Click `Done`.
-  - Double click on `nlu` node and specify NLU service instance credentials and click on `Done`.
-  - Double click on `NLClassifier` node. Update NLC credentials. Update classifier_id as noted in [this section](##4-create-nlc-service-instance). Click `Done`.
-  - Double click on `email db cloudant node`.
-  - Click the edit button against the field `Server`.
-  - Enter Cloudant database service instance's `Host`, `Username` and `Password` and click `Update`. Click `Done`.
+  - Email Node
+    - Double click to open `FromEmail` node. Update `Userid` and `Password` fields here. This is the customer support email id which needs to be monitored by organisations to receive emails from customers. For this code pattern, you can use your existing email id or create a new email account with gmail and provide the details here. Also, if required, update the refresh rate, which is in seconds, so that the node will look for new emails at regular intervals. The imported flow has a refresh rate of 360 seconds or 6 minutes. Click `Done`.
+  - Customer Data Search node
+    - Double click on `customer_data_search` node.
+    - Click the edit button against the field `Server`.
+    - Enter Cloudant database service instance's `Host`, `Username` and `Password` and click `Update`. Click `Done`.
+  - Add Model Id node
+    - Next we will need to update the Model Id of the WKS model that was deployed on NLU. Copy that model id to clipboard.
+    - Double click `Add Model Id` node and update the model id against `msg.nlu_options.entity_model`. Click `Done`.
+  - NLU Node
+    - Double click on `nlu` node and specify NLU service instance credentials and click on `Done`.
+  - NLC Node
+    - Double click on `NLClassifier` node. Update NLC credentials. Update classifier_id as noted in [this section](#4-create-nlc-service-instance). Click `Done`.
+  - Email db cloudant node
+    - Double click on `email db cloudant node`.
+    - Click the edit button against the field `Server`.
+    - Enter Cloudant database service instance's `Host`, `Username` and `Password` and click `Update`. Click `Done`.
 - Deploy Node-RED flow and check if it is working fine.
   - Click on `Deploy` on the top right corner of the screen.
   - Send an email from your email id (which acts as customer email - ensure that this email details are updated in customer_data database) to customer support email id as updated in FromEmail node of Node-RED.
@@ -220,15 +252,15 @@ curl -u <username>:<password>  "https://gateway.watsonplatform.net/natural-langu
 
 ## 6. Setup SendGrid service
 Sendgrid service is used to send emails from our application to customers.
-- Create an instance of sendgrid [here](https://console.bluemix.net/catalog/services/sendgrid).
+- Create an instance of sendgrid [here](https://console.bluemix.net/catalog/services/sendgrid). Select free plan.
 - Create sendgrid apikey using this [link](https://sendgrid.com/docs/ui/account-and-settings/api-keys/).
-- Update sendgrid api key in manifest.yml file against the key *sendgrid_api_key*.
-
+- Update sendgrid api key in <project_root>/manifest.yml file against the key *sendgrid_api_key*.
+- In <project_root>/manifest.yml, from email id is provided. User is free to change this email id to any email id they wish to, provided they have password for it.
 
 ## 7. Deploy application and send emails
-- Go to the cloned project parent folder and open manifest.yml in any text editor.
-- In command prompt, change directory to cloned project parent folder using command `cd email-support-classifier`.
-- Under *services* update the Cloudant service instance name.
+- Go to the cloned project parent folder. In command prompt, change directory to cloned project parent folder using command `cd smart-email-support`.
+- Open manifest.yml in any text editor.
+- Under **services** update the Cloudant service instance name.
 - On command prompt, login to IBM Cloud using `ibmcloud login` or `ibmcloud login --sso` (for federated login).
 - Run the below command to deploy the application to IBM Cloud.
 ```
@@ -246,7 +278,7 @@ ibmcloud cf push
 ![AppHomePage](images/AppHomePage.png)
 
 - The home page shows a dashboard containing intents of emails, and for each intent it shows number of emails, completed emails and emails that need attention.
-
+- If there are no emails, then the home page shows a blank page. Send few emails, as instructed in [this section](#52-deploy-node-red-flow), with different intents so that there is some data to get populated in the application.
 - Click on emails link, shown in below image, to see list of emails
 
 ![EmailsLink](images/EmailsLink.png)
@@ -263,6 +295,8 @@ Here you can see what all entities were identified and what all entities are mis
 
 - Responses to emails are auto composed. User can just click the send button to send response to customer. Ensure that the email is received on customer email id.
 
+> Editing auto composed email is not provided in this code pattern while the user can use this code pattern to implement this feature
+
 ![SendEmail](images/SendEmail.png)
 
 That concludes the flow of the application.
@@ -273,7 +307,7 @@ We saw that emails sent by customers are categorised into different intents. Ema
 
 
 # Troubleshooting
-See [Debigging.md](./Debugging.md)
+See [Debugging.md](./Debugging.md)
 
 
 # License
