@@ -73,9 +73,6 @@ if( process.env.VCAP_SERVICES ){
 var supportEmailId = process.env.support_email_id;
 sendgrid_api_key = process.env.sendgrid_api_key;
 
-//var me = '827075d4-ef5f-4ef2-b87e-c54ecf0c0805-bluemix'; // TODO.. take it from service binding
-//var password = 'a53388fb905199503265c9559c5025a49b6028d20015c546dd7706bc47b92fd2';
-
 // Initialize the library with my account.
 var cloudant = Cloudant({ account: me, password: password });
 
@@ -276,12 +273,12 @@ app.get('/rest/emailDetails/:_id', function (req, res) {
       for (var i = 0; i < missingData.length; i++) {
         replyText = replyText + "<br/>" + missingData[i];
       }
-      replyText = replyText + "<br/> Regards, <br/> Customer Support Team."
+      replyText = replyText + "<br/><br/> Regards, <br/> Customer Support Team."
       emailDetails.status = "Incomplete";
     } else {
       replyText = "Thanks. We have all the information required to process this request. The request will be completed automatically";
       emailDetails.status = "Complete";
-      replyText = replyText + "<br/> Regards, <br/> Customer Support Team."
+      replyText = replyText + "<br/><br/> Regards, <br/> Customer Support Team."
     }
     emailDetails.replySection.replyText = replyText;
 
@@ -397,10 +394,12 @@ app.get('/rest/emailsender/:_id', function (req, res) {
       for (var i = 0; i < missingData.length; i++) {
         replyText = replyText + "\n" + missingData[i];
       }
+      replyText = replyText + "\n\n Regards, \n Customer Support Team."
       emailDetails.status = "Incomplete";
     } else {
       replyText = "Thanks. We have all the information required to process this request. The request will be completed automatically";
       emailDetails.status = "Complete";
+      replyText = replyText + "\n\n Regards, \n Customer Support Team."
     }
     emailDetails.replySection.replyText = replyText;
 
