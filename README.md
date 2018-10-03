@@ -1,4 +1,4 @@
-# Smart Email Support
+# Smart Email Support for Telecom Organisations - Provide automated customer support for emails
 
 Providing customer support in a timely manner is very important to enhance customer experience. Organisations receive communication, from their customers, through various channels like emails, phone calls, applications etc. Organisations need to understand the intent and content of each of the communication and ask customers for any additional information required to fulfil their requests. Manually processing each email request requires a lot of time to go through the emails, understand them and respond to them in a quick and appropriate manner. Additionally, manual processing is error prone. Delay in acting on customer requests could affect customer satisfaction levels. This code pattern addresses these issues. It will demonstrates Watson’s ability to automate email responses that are related to business processes. Customers will benefit from more timely responses and clear instructions for what information is needed in order to fulfill their requests.
 
@@ -201,7 +201,7 @@ curl -u <username>:<password>  "https://gateway.watsonplatform.net/natural-langu
 ## 5. Setup and deploy Node-RED flow
 
 ### 5.1 Create Node-RED service
-- Click [Create Node-RED service instance] to create an instance of Node-Red.
+- Click [Create Node-RED service instance](https://console.bluemix.net/catalog/starters/node-red-starter) to create an instance of Node-Red.
 - Enter any name that you like. For this code pattern we have service name as `wbc-node-red`.
 
 ![NodeRedCreate](images/node-red-create.png)
