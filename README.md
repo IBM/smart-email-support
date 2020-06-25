@@ -248,6 +248,8 @@ curl -u <username>:<password>  "https://gateway.watsonplatform.net/natural-langu
   - Send an email from your email id (which acts as customer email - ensure that this email details are updated in customer_data database) to customer support email id as updated in FromEmail node of Node-RED.
   - Ensure that the Node-RED flow is executed and that debug messages are printed. Check this [link](https://nodered.org/docs/user-guide/nodes#debug) to find more details on debug node.
   - Populate the email database, by sending few emails with requests for *Plan Change*, *Enable Service*, *Disable Service*, *Add Family Member to plan*. Suggest you to send few emails with different intents. Ensure that sender emails ids are available in customer_data database of Cloudant.
+  - If you encounter an error with Cloudant database which says "TypeError: Cannot read property 'match' of null", then in the node red flow, double click the cloudant node and under `Service` dropdown, select the default cloudant node created when Node-Red service got created. 
+  ![NodeRedCreate](images/cloudant-service.png)
 
 
 ## 6. Setup SendGrid service
