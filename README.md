@@ -193,7 +193,7 @@ curl -i --user <username>:<password> -F training_data=@./Intent_training.csv -F 
 - The NLC service instance will be trained with the training data *Intent_training.csv*. The command is executed with a information saying that it'll take sometime to train NLC. It takes a few minutes to train NLC.
 - Get classifier id using the command
 ```
-curl -u <username>:<password>  "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
+curl -u <username>:<password>  "https://api.us-south.natural-language-classifier.watson.cloud.ibm.com/v1/classifiers"
 ```
 - Make a note of *classifier_id*.
 
